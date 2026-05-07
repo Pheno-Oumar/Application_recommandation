@@ -16,7 +16,6 @@ public class Profil {
 	private Utilisateur utilisateur;
 	
 	public Profil() {
-		
 		this.competences = new ArrayList<>();
 	}
 	
