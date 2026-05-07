@@ -24,6 +24,14 @@ public class Activite {
 	public Activite() {
 		this.competences = new ArrayList<>();
 	}
+	
+	/*public Activite(String nom, String description ) {
+		this.nom = nom;
+		this.description = description;
+		this.categorie = categorie;
+		
+	}*/
+	
 
 	public int getId() {
 		return id;
