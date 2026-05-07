@@ -17,8 +17,7 @@ public class MySQL implements Database {
 		String username = "root";
 		String passwd = "";
 		try {
-
-			Connection conn = DriverManager.getConnection(url, username, passwd);
+			 conn = DriverManager.getConnection(url, username, passwd);
 			System.out.println("Connexion reussi.");
 		} catch (SQLException e) {
 			System.out.println("Erreur: " + e.getMessage());
