@@ -50,6 +50,7 @@ public class Recommandation {
 		 
 		
 		 a.setCompetences(competences);
+		 return a;
 	}
 	 
 }
