@@ -1,6 +1,8 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Recommandation {
 	
@@ -36,5 +38,19 @@ public class Recommandation {
 		this.dateAjout = dateAjout;
 	}
 	
-
+	public Activite creer() {
+		Activite a =new Activite();
+		 
+		 a.setNom("hjghds");
+		 Competence com1 = new Competence();
+		 com1.setNom("hjvhd");
+		 com1.setDescription("hbdjh");
+		 List<Competence> competences = new ArrayList<>();
+		 competences.add(com1);
+		 
+		
+		 a.setCompetences(competences);
+		 return a;
+	}
+	 
 }

@@ -122,6 +122,7 @@ public class CompetenceDAOImpl implements CompetenceInterface {
 
         try (
                 Connection conn = db.connexion();
+        		//
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(sql)
         ) {

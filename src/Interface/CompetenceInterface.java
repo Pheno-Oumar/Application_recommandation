@@ -16,6 +16,10 @@ public interface CompetenceInterface {
     List<Competence> trouverTousCompetences();
 
     Optional<Competence> trouverCompetenceParId(int id);
-	
+
+	 
+
+	 
 
 }
+
