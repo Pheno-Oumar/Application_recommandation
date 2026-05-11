@@ -1,14 +1,71 @@
-package Main;
+import DAO.CompetenceDAOImpl;
+import Database.MySQLDatabase;
+import Interface.CompetenceInterface;
+import Interface.Database;
+import Model.Competence;
+import Service.CompetenceServiceImpl;
 
 public class Main {
 
-	public Main() {
-		// TODO Auto-generated constructor stub
-	}
+    public static void main(String[] args) {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+        // Création de la connexion BD
+        Database db = new MySQLDatabase();
 
-	}
+        // Création du DAO
+        CompetenceInterface dao =
+                new CompetenceDAOImpl(db);
 
+        // Création du Service
+        CompetenceServiceImpl service =
+                new CompetenceServiceImpl(dao);
+
+        // =========================
+        // TEST AJOUT
+        // =========================
+
+        Competence comp = new Competence();
+
+        comp.setNom("Java");
+        comp.setDescription("Programmation orientée objet");
+
+        service.creerCompetence(comp);
+
+        // =========================
+        // TEST AFFICHAGE
+        // =========================
+
+        System.out.println("\nListe des compétences :");
+
+        service.obtenirToutesCompetences()
+                .forEach(System.out::println);
+
+        // =========================
+        // TEST RECHERCHE PAR ID
+        // =========================
+
+        System.out.println("\nRecherche compétence ID 1 :");
+
+        service.obtenirCompetenceParId(1)
+                .ifPresent(System.out::println);
+
+        // =========================
+        // TEST MODIFICATION
+        // =========================
+
+        Competence compUpdate = new Competence();
+
+        compUpdate.setId(1);
+        compUpdate.setNom("Java Avancé");
+        compUpdate.setDescription("Spring Boot et JDBC");
+
+        service.modifierCompetence(compUpdate);
+
+        // =========================
+        // TEST SUPPRESSION
+        // =========================
+
+        // service.supprimerCompetence(1);
+
+    }
 }
