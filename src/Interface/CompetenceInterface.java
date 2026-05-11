@@ -1,6 +1,7 @@
 package Interface;
 
 import java.util.List;
+import java.util.Optional;
 
 import Model.Competence;
 
@@ -14,7 +15,7 @@ public interface CompetenceInterface {
 
     List<Competence> trouverTousCompetences();
 
-    Competence trouverCompetenceParId(int id);
+    Optional<Competence> trouverCompetenceParId(int id);
 	
 
 }
