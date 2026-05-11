@@ -9,6 +9,14 @@ public class Utilisateur {
 	private String mdp;
 	private Role role;
 
+	
+	public Utilisateur(String nom, String prenom, String telephone,  String mdp) {
+	    this.nom = nom;
+	    this.prenom = prenom;
+	    this.telephone = telephone;
+	    this.mdp = mdp;
+	}
+	
 	public int getId() {
 		return id;
 	}
