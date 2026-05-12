@@ -18,23 +18,28 @@ public class RecommandationDAO {
         this.db = db;
     }
 
-    public List<Recommandation> afficher() {
+    public List<Recommandation> afficher(int profilId) {
 
         List<Recommandation> liste = new ArrayList<>();
-        String sql = "SELECT * FROM recommandation";
+        String sql = "SELECT * FROM recommandation WHERE profilId = ?";
 
         try (Connection conn = this.db.connexion();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            while (rs.next()) {
+            // Remplacement du ? par l'identifiant du profil
+            ps.setInt(1, profilId);
 
-                Recommandation r = new Recommandation();
+            try (ResultSet rs = ps.executeQuery()) {
 
-                r.setId(rs.getInt("id"));
-                r.setDateAjout(rs.getDate("dateAjout"));
+                while (rs.next()) {
 
-                liste.add(r);
+                    Recommandation r = new Recommandation();
+
+                    r.setId(rs.getInt("id"));
+                    r.setDateAjout(rs.getDate("dateAjout"));
+
+                    liste.add(r);
+                }
             }
 
         } catch (Exception e) {
@@ -43,7 +48,6 @@ public class RecommandationDAO {
 
         return liste;
     }
-
     public void ajouter(Recommandation r) {
 
         String sql = "INSERT INTO recommandation(activiteId, profilId, dateAjout) VALUES (?, ?, ?)";
@@ -81,25 +85,5 @@ public class RecommandationDAO {
         }
     }
 
-    public void modifier(Recommandation r) {
-
-        String sql =
-            "UPDATE recommandation SET activiteId=?, profilId=?, dateAjout=? WHERE id=?";
-
-        try (Connection conn = this.db.connexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, r.getActivite().getId());
-            ps.setInt(2, r.getProfil().getId());
-            ps.setDate(3, new java.sql.Date(r.getDateAjout().getTime()));
-            ps.setInt(4, r.getId());
-
-            ps.executeUpdate();
-
-            System.out.println("Modification réussie");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+   
 }

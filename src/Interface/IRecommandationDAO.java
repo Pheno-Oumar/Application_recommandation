@@ -5,11 +5,12 @@ import Model.Recommandation;
 
 public interface IRecommandationDAO {
 
-    List<Recommandation> afficher();
+    List<Recommandation> afficher(int profilId);
 
     void ajouter(Recommandation r);
 
     void supprimer(int id);
 
-    void modifier(Recommandation r);
+
+    
 }
