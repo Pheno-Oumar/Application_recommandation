@@ -40,5 +40,4 @@ public class Competence {
 		this.description = description;
 	}
 		
-
 }
