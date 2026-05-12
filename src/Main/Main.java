@@ -1,71 +1,348 @@
-import DAO.CompetenceDAOImpl;
-import Database.MySQLDatabase;
-import Interface.CompetenceInterface;
+
+package Main;
+
+
+//import java.util.ArrayList;
+//import java.util.List;
+import java.util.Scanner;
+
+import ConnectionDB.MySQL;
+//import DAO.ActiviteCompetenceDAOImpl;
+//import DAO.ImplementationProfilDAO;
+
+import DAO.UtilisateurDAO;
+//import Enumeration.TypeZone;
 import Interface.Database;
-import Model.Competence;
-import Service.CompetenceServiceImpl;
+//import Model.Competence;
+//import Model.Profil;
+import Model.Utilisateur;
+//import Service.CompetenceService;
+import Service.IUtilisateurService;
+
+
+import Service.UtilisateurService;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // Création de la connexion BD
-        Database db = new MySQLDatabase();
+        Scanner sc = new Scanner(System.in);
 
-        // Création du DAO
-        CompetenceInterface dao =
-                new CompetenceDAOImpl(db);
+        // Connexion DB
+        Database db = new MySQL();
 
-        // Création du Service
-        CompetenceServiceImpl service =
-                new CompetenceServiceImpl(dao);
+        // DAO
+        UtilisateurDAO utilisateurDAO = new UtilisateurDAO(db);
+        //ProfilDAO profilDAO = new ProfilDAO(db);
+        //CompetenceDAO competenceDAO = new CompetenceDAO(db);
+       // ProfilCompetenceDAO profilCompetenceDAO = new ProfilCompetenceDAO(db);
 
-        // =========================
-        // TEST AJOUT
-        // =========================
+        // Services
+        IUtilisateurService utilisateurService =
+                new UtilisateurService(utilisateurDAO);
 
-        Competence comp = new Competence();
+        /*ICompetenceService competenceService =
+                new CompetenceService(competenceDAO);
 
-        comp.setNom("Java");
-        comp.setDescription("Programmation orientée objet");
+        IProfilService profilService =
+                new ProfilService(profilDAO, profilCompetenceDAO);
 
-        service.creerCompetence(comp);
+        */
+        
+        Utilisateur utilisateurConnecte = null;
 
-        // =========================
-        // TEST AFFICHAGE
-        // =========================
+        while (true) {
 
-        System.out.println("\nListe des compétences :");
+            // ==========================
+            // MENU AUTHENTIFICATION
+            // ==========================
+            while (utilisateurConnecte == null) {
 
-        service.obtenirToutesCompetences()
-                .forEach(System.out::println);
+                System.out.println("\n===== AUTHENTIFICATION =====");
+                System.out.println("1. Inscription");
+                System.out.println("2. Connexion");
+                System.out.println("0. Quitter");
 
-        // =========================
-        // TEST RECHERCHE PAR ID
-        // =========================
+                System.out.print("Votre choix : ");
+                int choixAuth = sc.nextInt();
+                sc.nextLine();
 
-        System.out.println("\nRecherche compétence ID 1 :");
+                switch (choixAuth) {
 
-        service.obtenirCompetenceParId(1)
-                .ifPresent(System.out::println);
+                    case 1:
 
-        // =========================
-        // TEST MODIFICATION
-        // =========================
+                        // Validation nom
+                        String nom;
+                        do {
+                            System.out.print("Nom : ");
+                            nom = sc.nextLine().trim();
 
-        Competence compUpdate = new Competence();
+                            if (nom.isEmpty()) {
+                                System.out.println("Nom obligatoire.");
+                            }
 
-        compUpdate.setId(1);
-        compUpdate.setNom("Java Avancé");
-        compUpdate.setDescription("Spring Boot et JDBC");
+                        } while (nom.isEmpty());
 
-        service.modifierCompetence(compUpdate);
+                        // Validation prénom
+                        String prenom;
+                        do {
+                            System.out.print("Prénom : ");
+                            prenom = sc.nextLine().trim();
 
-        // =========================
-        // TEST SUPPRESSION
-        // =========================
+                            if (prenom.isEmpty()) {
+                                System.out.println("Prénom obligatoire.");
+                            }
 
-        // service.supprimerCompetence(1);
+                        } while (prenom.isEmpty());
 
+                        // Validation téléphone
+                        String tel;
+                        do {
+                            System.out.print("Téléphone : ");
+                            tel = sc.nextLine().trim();
+
+                            if (tel.isEmpty()) {
+                                System.out.println("Téléphone obligatoire.");
+                            }
+
+                        } while (tel.isEmpty());
+
+                        // Validation mot de passe
+                        String mdp;
+                        do {
+                            System.out.print("Mot de passe : ");
+                            mdp = sc.nextLine().trim();
+
+                            if (mdp.isEmpty()) {
+                                System.out.println("Mot de passe obligatoire.");
+                            }
+
+                            else if (mdp.length() < 4) {
+                                System.out.println(
+                                        "Mot de passe trop court (minimum 4 caractères)"
+                                );
+                                mdp = "";
+                            }
+
+                        } while (mdp.isEmpty());
+
+                        Utilisateur nouvelUtilisateur =
+                                new Utilisateur(
+                                        nom,
+                                        prenom,
+                                        tel,
+                                        mdp
+                                );
+
+                        utilisateurService.inscription(
+                                nouvelUtilisateur
+                        );
+
+                        break;
+
+                    case 2:
+
+                        System.out.print("Téléphone : ");
+                        String phone = sc.nextLine();
+
+                        System.out.print("Mot de passe : ");
+                        String pass = sc.nextLine();
+
+                        utilisateurConnecte =
+                                utilisateurService.connexion(
+                                        phone,
+                                        pass
+                                );
+
+                        break;
+
+                    case 0:
+                        System.out.println("Au revoir !");
+                        sc.close();
+                        return;
+
+                    default:
+                        System.out.println("Choix invalide.");
+                }
+            }
+
+            // ==========================
+            // MENU UTILISATEUR CONNECTÉ
+            // ==========================
+            int choixUser;
+
+            do {
+                System.out.println("\n===== MENU UTILISATEUR =====");
+                System.out.println("1. Compléter mon profil");
+                System.out.println("2. Voir mon profil");
+                System.out.println("0. Déconnexion");
+
+                System.out.print("Votre choix : ");
+                choixUser = sc.nextInt();
+                sc.nextLine();
+
+                /*switch (choixUser) {
+
+                    case 1:
+
+                        Profil profil = new Profil();
+
+                        System.out.print("Disponibilité : ");
+                        profil.setDisponibilite(
+                                sc.nextDouble()
+                        );
+
+                        System.out.print("Capital : ");
+                        profil.setCapital(
+                                sc.nextDouble()
+                        );
+
+                        System.out.print(
+                                "Accès internet (true/false): "
+                        );
+                        profil.setAccessInternet(
+                                sc.nextBoolean()
+                        );
+
+                        sc.nextLine();
+
+                        System.out.println(
+                                "Choisissez votre zone :"
+                        );
+                        System.out.println("1. Village");
+                        System.out.println("2. Ville");
+
+                        int zoneChoix = sc.nextInt();
+                        sc.nextLine();
+
+                        if (zoneChoix == 1) {
+                            profil.setZone(
+                                    TypeZone.VILLAGE
+                            );
+                        } else {
+                            profil.setZone(
+                                    TypeZone.VILLE
+                            );
+                        }
+
+                        // afficher compétences
+                        List<Competence> competences =
+                                competenceService
+                                        .afficherToutesCompetences();
+
+                        if (competences.isEmpty()) {
+                            System.out.println(
+                                    "Aucune compétence disponible."
+                            );
+                            break;
+                        }
+
+                        System.out.println(
+                                "Liste des compétences disponibles :"
+                        );
+
+                        for (Competence comp : competences) {
+                            System.out.println(
+                                    comp.getId()
+                                            + " - "
+                                            + comp.getNom()
+                            );
+                        }
+
+                        System.out.println(
+                                "Entrez les IDs séparés par virgule (ex: 1,2)"
+                        );
+
+                        String ids = sc.nextLine();
+
+                        String[] splitIds =
+                                ids.split(",");
+
+                        List<Integer> competenceIds =
+                                new ArrayList<>();
+
+                        for (String id : splitIds) {
+                            competenceIds.add(
+                                    Integer.parseInt(
+                                            id.trim()
+                                    )
+                            );
+                        }
+
+                        profilService.completerProfil(
+                                utilisateurConnecte.getId(),
+                                profil,
+                                competenceIds
+                        );
+
+                        break;
+
+                    case 2:
+
+                        Profil monProfil =
+                                profilService.voirMonProfil(
+                                        utilisateurConnecte.getId()
+                                );
+
+                        if (monProfil != null) {
+
+                            System.out.println(
+                                    "\n===== MON PROFIL ====="
+                            );
+
+                            System.out.println(
+                                    "Disponibilité : "
+                                            + monProfil.getDisponibilite()
+                            );
+
+                            System.out.println(
+                                    "Capital : "
+                                            + monProfil.getCapital()
+                            );
+
+                            System.out.println(
+                                    "Zone : "
+                                            + monProfil.getZone()
+                            );
+
+                            System.out.println(
+                                    "Compétences : "
+                            );
+
+                            if (monProfil.getCompetences() != null
+                                    && !monProfil.getCompetences().isEmpty()) {
+
+                                for (Competence comp :
+                                        monProfil.getCompetences()) {
+
+                                    System.out.println(
+                                            "- " + comp.getNom()
+                                    );
+                                }
+
+                            } else {
+                                System.out.println(
+                                        "Aucune compétence associée."
+                                );
+                            }
+                        }
+
+                        break;
+
+                    case 0:
+                        utilisateurConnecte = null;
+                        System.out.println(
+                                "Déconnexion réussie."
+                        );
+                        break;
+
+                    default:
+                        System.out.println(
+                                "Choix invalide."
+                        );
+                }
+*/
+            } while (choixUser != 0);
+        }
     }
 }
