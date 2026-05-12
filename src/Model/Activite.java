@@ -10,8 +10,8 @@ public class Activite {
 	private int id;
 	private String nom;
 	private String description;
-	private Categorie categorie;
 	private double disponibilite;
+	private boolean accesInternet;
 	private String etapes;
 	private String risques;
 	private String materiaux;
@@ -57,20 +57,22 @@ public class Activite {
 		this.description = description;
 	}
 
-	public Categorie getCategorie() {
-		return categorie;
-	}
-
-	public void setCategorie(Categorie categorie) {
-		this.categorie = categorie;
-	}
-
 	public double getDisponibilite() {
 		return disponibilite;
 	}
 
 	public void setDisponibilite(double disponibilite) {
 		this.disponibilite = disponibilite;
+	}
+	
+	
+
+	public boolean isAccesInternet() {
+		return accesInternet;
+	}
+
+	public void setAccesInternet(boolean accesInternet) {
+		this.accesInternet = accesInternet;
 	}
 
 	public String getEtapes() {
@@ -136,6 +138,8 @@ public class Activite {
 	public void setRevenueMax(double revenueMax) {
 		this.revenueMax = revenueMax;
 	}
+
+
 	
 
 }
