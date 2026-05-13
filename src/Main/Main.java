@@ -1,8 +1,10 @@
+import ConnectionDB.MySQL;
 import DAO.CompetenceDAOImpl;
 import Database.MySQLDatabase;
 import Interface.CompetenceInterface;
 import Interface.Database;
 import Model.Competence;
+import Service.CompetenceService;
 import Service.CompetenceServiceImpl;
 
 public class Main {
@@ -10,19 +12,17 @@ public class Main {
     public static void main(String[] args) {
 
         // Création de la connexion BD
-        Database db = new MySQLDatabase();
+        Database db = new MySQL();
 
         // Création du DAO
         CompetenceInterface dao =
                 new CompetenceDAOImpl(db);
 
         // Création du Service
-        CompetenceServiceImpl service =
-                new CompetenceServiceImpl(dao);
+        CompetenceService service =
+                new CompetenceService(dao);
 
-        // =========================
-        // TEST AJOUT
-        // =========================
+         
 
         Competence comp = new Competence();
 
@@ -31,27 +31,26 @@ public class Main {
 
         service.creerCompetence(comp);
 
-        // =========================
+         
         // TEST AFFICHAGE
-        // =========================
-
+        
         System.out.println("\nListe des compétences :");
 
         service.obtenirToutesCompetences()
                 .forEach(System.out::println);
 
-        // =========================
+         
         // TEST RECHERCHE PAR ID
-        // =========================
+        
 
         System.out.println("\nRecherche compétence ID 1 :");
 
         service.obtenirCompetenceParId(1)
                 .ifPresent(System.out::println);
 
-        // =========================
+        
         // TEST MODIFICATION
-        // =========================
+        
 
         Competence compUpdate = new Competence();
 
@@ -61,11 +60,11 @@ public class Main {
 
         service.modifierCompetence(compUpdate);
 
-        // =========================
+        
         // TEST SUPPRESSION
-        // =========================
+       
 
-        // service.supprimerCompetence(1);
+        service.supprimerCompetence(1);
 
     }
 }
