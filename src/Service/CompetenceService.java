@@ -16,7 +16,7 @@ public class CompetenceService {
         this.competenceDAO = competenceDAO;
     }
 
-    
+ 
     // PARTIE AJOUTER UNE COMPETENCE
     
     public Competence creerCompetence(Competence comp) {
